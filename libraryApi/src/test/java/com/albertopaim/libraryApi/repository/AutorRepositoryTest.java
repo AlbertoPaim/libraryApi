@@ -15,7 +15,7 @@ public class AutorRepositoryTest {
     AutorRepository autorRepository;
 
     @Test
-    public void salvarAutor() {
+     void salvarAutor() {
         Autor autor = new Autor();
         autor.setName("Alberto atualizado");
         autor.setDataNascimento(LocalDate.of(1998, 7, 19));
@@ -38,7 +38,6 @@ public class AutorRepositoryTest {
             autorEncontrado.setDataNascimento(LocalDate.of(2000, 1, 8));
 
             autorRepository.save(autorEncontrado);
-
         }
     }
 }
