@@ -33,4 +33,14 @@ class LivroRepositoryTest {
 
         livroRepository.save(novoLivro);
     }
+    @Test
+    void getLivro(){
+        UUID id = UUID.fromString("bb0ff5b5-fd7c-478c-91ce-222af62f54d8");
+        Livro livroEncontrado = livroRepository.findById(id).orElse(null);
+
+        System.out.println(livroEncontrado.getTitulo());
+
+        Autor autorEncontrado = livroEncontrado.getAutor();
+        System.out.println(autorEncontrado.getName());
+    }
 }
