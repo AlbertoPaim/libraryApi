@@ -9,7 +9,9 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "autor")
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Autor {
     @Id
     @Column(name = "id")
@@ -28,43 +30,4 @@ public class Autor {
     @OneToMany(mappedBy = "autor")
     private List<Livro> livros;
 
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public LocalDate getDataNascimento() {
-        return dataNascimento;
-    }
-
-    public void setDataNascimento(LocalDate dataNascimento) {
-        this.dataNascimento = dataNascimento;
-    }
-
-    public String getNacionalidade() {
-        return nacionalidade;
-    }
-
-    public void setNacionalidade(String nacionalidade) {
-        this.nacionalidade = nacionalidade;
-    }
-
-    public List<Livro> getLivros() {
-        return livros;
-    }
-
-    public void setLivros(List<Livro> livros) {
-        this.livros = livros;
-    }
 }

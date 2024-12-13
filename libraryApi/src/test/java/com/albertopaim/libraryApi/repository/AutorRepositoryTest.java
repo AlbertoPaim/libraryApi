@@ -1,11 +1,16 @@
 package com.albertopaim.libraryApi.repository;
 
 import com.albertopaim.libraryApi.model.Autor;
+import com.albertopaim.libraryApi.model.GeneroLivro;
+import com.albertopaim.libraryApi.model.Livro;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,6 +18,8 @@ import java.util.UUID;
 public class AutorRepositoryTest {
     @Autowired
     AutorRepository autorRepository;
+    @Autowired
+    LivroRepository livroRepository;
 
     @Test
      void salvarAutor() {
@@ -39,6 +46,39 @@ public class AutorRepositoryTest {
 
             autorRepository.save(autorEncontrado);
         }
+    }
+
+    @Test
+    public void criarAutorComLivros(){
+        Autor autor = new Autor();
+        autor.setName("Tino ");
+        autor.setDataNascimento(LocalDate.of(3000, 7, 19));
+        autor.setNacionalidade("Brasileiro");
+
+        Livro novoLivro = new Livro();
+        novoLivro.setIsbn("21");
+        novoLivro.setTitulo("A bela e a fera");
+        novoLivro.setDataPublicacao(LocalDate.of(1800, 7, 19));
+        novoLivro.setPreco(BigDecimal.valueOf(100));
+        novoLivro.setGenero(GeneroLivro.ROMANCE);
+        novoLivro.setAutor(autor);
+
+        Livro novoLivro2 = new Livro();
+        novoLivro2.setIsbn("22");
+        novoLivro2.setTitulo("Historias de outlast");
+        novoLivro2.setDataPublicacao(LocalDate.of(1800, 7, 19));
+        novoLivro2.setPreco(BigDecimal.valueOf(100));
+        novoLivro2.setGenero(GeneroLivro.TERROR);
+        novoLivro2.setAutor(autor);
+
+
+        autor.setLivros(new ArrayList<>());
+        autor.getLivros().add(novoLivro);
+        autor.getLivros().add(novoLivro2);
+
+        autorRepository.save(autor);
+
+        livroRepository.saveAll(autor.getLivros());
     }
 }
 

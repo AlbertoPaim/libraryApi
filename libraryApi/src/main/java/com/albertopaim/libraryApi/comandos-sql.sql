@@ -15,6 +15,6 @@ data_publicacao date not null,
 genero varchar(30) not null,
 preco numeric not null,
 id_autor uuid not null references autor(id),
-constraint chk_genero check (genero in ('TERROR, COMÉDIA', 'FANTASIA', 'AVENTURA', 'ROMANCE'))
+constraint chk_genero check (genero in ('TERROR', 'COMÉDIA', 'FANTASIA', 'AVENTURA', 'ROMANCE'))
 )
 
