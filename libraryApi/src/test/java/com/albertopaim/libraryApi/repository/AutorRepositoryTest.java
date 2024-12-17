@@ -3,6 +3,7 @@ package com.albertopaim.libraryApi.repository;
 import com.albertopaim.libraryApi.model.Autor;
 import com.albertopaim.libraryApi.model.GeneroLivro;
 import com.albertopaim.libraryApi.model.Livro;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,7 +24,7 @@ public class AutorRepositoryTest {
     LivroRepository livroRepository;
 
     @Test
-     void salvarAutor() {
+    void salvarAutor() {
         Autor autor = new Autor();
         autor.setName("Alberto atualizado");
         autor.setDataNascimento(LocalDate.of(1998, 7, 19));
@@ -49,7 +51,7 @@ public class AutorRepositoryTest {
     }
 
     @Test
-    public void criarAutorComLivros(){
+    public void criarAutorComLivros() {
         Autor autor = new Autor();
         autor.setName("Tino ");
         autor.setDataNascimento(LocalDate.of(3000, 7, 19));
@@ -79,6 +81,20 @@ public class AutorRepositoryTest {
         autorRepository.save(autor);
 
         livroRepository.saveAll(autor.getLivros());
+    }
+
+    @Test
+    @Transactional
+    public void listarLivrosAutor() {
+    UUID id = UUID.fromString("dc1c1923-9258-4208-9e64-38cbac8744e7");
+    Autor autorEncontrado = autorRepository.findById(id).orElse(null);
+
+        List<Livro> byAutor = livroRepository.findByAutor(autorEncontrado);
+
+        autorEncontrado.setLivros(byAutor);
+
+        autorEncontrado.getLivros().forEach(System.out::println);
+
     }
 }
 

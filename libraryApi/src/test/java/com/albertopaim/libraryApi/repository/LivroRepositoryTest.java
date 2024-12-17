@@ -3,12 +3,14 @@ package com.albertopaim.libraryApi.repository;
 import com.albertopaim.libraryApi.model.Autor;
 import com.albertopaim.libraryApi.model.GeneroLivro;
 import com.albertopaim.libraryApi.model.Livro;
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @SpringBootTest
@@ -35,12 +37,19 @@ class LivroRepositoryTest {
     }
     @Test
     void getLivro(){
-        UUID id = UUID.fromString("bb0ff5b5-fd7c-478c-91ce-222af62f54d8");
+        UUID id = UUID.fromString("9b50b027-e94e-45d2-9ee3-2830e1ebd02e");
         Livro livroEncontrado = livroRepository.findById(id).orElse(null);
 
         System.out.println(livroEncontrado.getTitulo());
 
         Autor autorEncontrado = livroEncontrado.getAutor();
         System.out.println(autorEncontrado.getName());
+    }
+
+    @Test
+    @Transactional
+    public void  findLivroByTitulo(){
+        List<Livro> livro = livroRepository.findByTitulo("Historias de outlast");
+        livro.forEach(System.out::println);
     }
 }
