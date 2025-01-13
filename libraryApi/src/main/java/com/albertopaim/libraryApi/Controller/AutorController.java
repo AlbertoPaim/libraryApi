@@ -3,8 +3,6 @@ package com.albertopaim.libraryApi.Controller;
 
 import com.albertopaim.libraryApi.model.Autor;
 import com.albertopaim.libraryApi.services.AutorService;
-import jakarta.websocket.server.PathParam;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,6 +11,8 @@ import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/autores")
@@ -69,7 +69,13 @@ public class AutorController {
 
     }
 
+    @GetMapping
     public ResponseEntity<List<AutorDTO>> getAutores(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "nacionalidade", required = false) String nacionalidade){
 
+        List<Autor> resultado = autorService.searchAutor(name, nacionalidade);
+
+        List<AutorDTO> listaDto = resultado.stream().map(autor -> new AutorDTO(autor.getName(), autor.getDataNascimento(), autor.getNacionalidade())).collect(Collectors.toList());
+
+        return ResponseEntity.ok(listaDto);
     }
 }

@@ -4,6 +4,7 @@ import com.albertopaim.libraryApi.model.Autor;
 import com.albertopaim.libraryApi.repository.AutorRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,5 +27,18 @@ public class AutorService {
     public void delete(Autor autor) {
         autorRepository.delete(autor);
     }
-}
 
+    public List<Autor> searchAutor(String name, String nacionalidade) {
+        if (name != null && nacionalidade != null) {
+            return autorRepository.findByNameAndNacionalidade(name, nacionalidade);
+        }
+        if (name != null) {
+            return autorRepository.findByName(name);
+        }
+        if (nacionalidade != null) {
+            return autorRepository.findByNacionalidade(nacionalidade);
+        }
+
+        return autorRepository.findAll();
+    }
+}
