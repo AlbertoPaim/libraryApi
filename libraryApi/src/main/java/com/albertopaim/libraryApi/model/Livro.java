@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -40,5 +41,9 @@ public class Livro {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_autor")
     private Autor autor;
+
+    private LocalDateTime dataCadastro;
+    private LocalDateTime dataAtualizacao;
+    private UUID idUsuario;
 }
 
