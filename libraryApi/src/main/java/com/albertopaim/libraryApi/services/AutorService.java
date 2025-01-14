@@ -20,6 +20,12 @@ public class AutorService {
         return autorRepository.save(autor);
     }
 
+    public void update(Autor autor) {
+        if(autor.getId() == null){
+            throw new IllegalArgumentException("Id nao cadastrado");        }
+         autorRepository.save(autor);
+    }
+
     public Optional<Autor> getAutorByid(UUID id) {
         return autorRepository.findById(id);
     }

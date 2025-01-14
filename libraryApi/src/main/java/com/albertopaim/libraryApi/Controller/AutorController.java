@@ -1,6 +1,7 @@
 package com.albertopaim.libraryApi.Controller;
 
 
+import com.albertopaim.libraryApi.Controller.dto.AutorDTO;
 import com.albertopaim.libraryApi.model.Autor;
 import com.albertopaim.libraryApi.services.AutorService;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class AutorController {
 
         if (autorOptional.isPresent()) {
             Autor autor = autorOptional.get();
-            AutorDTO dto = new AutorDTO(autor.getName(), autor.getDataNascimento(), autor.getNacionalidade());
+            AutorDTO dto = new AutorDTO(autor.getId(), autor.getName(), autor.getDataNascimento(), autor.getNacionalidade());
 
             return ResponseEntity.ok(dto);
         }
@@ -74,8 +75,28 @@ public class AutorController {
 
         List<Autor> resultado = autorService.searchAutor(name, nacionalidade);
 
-        List<AutorDTO> listaDto = resultado.stream().map(autor -> new AutorDTO(autor.getName(), autor.getDataNascimento(), autor.getNacionalidade())).collect(Collectors.toList());
+        List<AutorDTO> listaDto = resultado.stream().map(autor -> new AutorDTO(autor.getId(), autor.getName(), autor.getDataNascimento(), autor.getNacionalidade())).collect(Collectors.toList());
 
         return ResponseEntity.ok(listaDto);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Void> updateAutores(@PathVariable("id") String id,@RequestBody AutorDTO autorDTO) {
+
+        var idAutor = UUID.fromString(id);
+        Optional<Autor> autorOptional = autorService.getAutorByid(idAutor);
+
+        if (autorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var autor = autorOptional.get();
+        autor.setName(autorDTO.name());
+        autor.setDataNascimento(autorDTO.dataNascimento());
+        autor.setNacionalidade(autorDTO.nacionalidade());
+
+        autorService.update(autor);
+
+        return ResponseEntity.noContent().build();
     }
 }
