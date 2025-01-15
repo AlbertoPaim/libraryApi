@@ -2,6 +2,7 @@ package com.albertopaim.libraryApi.services;
 
 import com.albertopaim.libraryApi.model.Autor;
 import com.albertopaim.libraryApi.repository.AutorRepository;
+import com.albertopaim.libraryApi.validator.AutorValidator;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,18 +13,23 @@ import java.util.UUID;
 public class AutorService {
     private final AutorRepository autorRepository;
 
-    public AutorService(AutorRepository autorRepository) {
+    private final AutorValidator validator;
+
+    public AutorService(AutorRepository autorRepository, AutorValidator validator) {
         this.autorRepository = autorRepository;
+        this.validator = validator;
     }
 
     public Autor save(Autor autor) {
+        validator.validar(autor);
         return autorRepository.save(autor);
     }
 
     public void update(Autor autor) {
-        if(autor.getId() == null){
-            throw new IllegalArgumentException("Id nao cadastrado");        }
-         autorRepository.save(autor);
+        if (autor.getId() == null) {
+            throw new IllegalArgumentException("Id nao cadastrado");
+        }
+        autorRepository.save(autor);
     }
 
     public Optional<Autor> getAutorByid(UUID id) {

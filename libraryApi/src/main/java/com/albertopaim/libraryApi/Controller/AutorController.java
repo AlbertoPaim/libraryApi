@@ -2,6 +2,8 @@ package com.albertopaim.libraryApi.Controller;
 
 
 import com.albertopaim.libraryApi.Controller.dto.AutorDTO;
+import com.albertopaim.libraryApi.Controller.dto.ErroResponse;
+import com.albertopaim.libraryApi.exceptions.RegistroDuplicadosExceptions;
 import com.albertopaim.libraryApi.model.Autor;
 import com.albertopaim.libraryApi.services.AutorService;
 import org.springframework.http.ResponseEntity;
@@ -26,18 +28,22 @@ public class AutorController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody AutorDTO autor) {
-        Autor autorEntity = autor.mapearAutor();
-        autorService.save(autorEntity);
+    public ResponseEntity<Object> create(@RequestBody AutorDTO autor) {
+        try {
+            Autor autorEntity = autor.mapearAutor();
+            autorService.save(autorEntity);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(autorEntity.getId())
-                .toUri();
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(autorEntity.getId())
+                    .toUri();
 
-        return ResponseEntity.created(location).build();
-
+            return ResponseEntity.created(location).build();
+        } catch (RegistroDuplicadosExceptions e) {
+            var erroDTO = ErroResponse.conflito(e.getMessage());
+            return ResponseEntity.status(erroDTO.status()).body(erroDTO);
+        }
     }
 
     @GetMapping("{id}")
@@ -71,7 +77,7 @@ public class AutorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AutorDTO>> getAutores(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "nacionalidade", required = false) String nacionalidade){
+    public ResponseEntity<List<AutorDTO>> getAutores(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "nacionalidade", required = false) String nacionalidade) {
 
         List<Autor> resultado = autorService.searchAutor(name, nacionalidade);
 
@@ -81,7 +87,7 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateAutores(@PathVariable("id") String id,@RequestBody AutorDTO autorDTO) {
+    public ResponseEntity<Void> updateAutores(@PathVariable("id") String id, @RequestBody AutorDTO autorDTO) {
 
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.getAutorByid(idAutor);
