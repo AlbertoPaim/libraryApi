@@ -2,10 +2,11 @@ package com.albertopaim.libraryApi.Controller;
 
 
 import com.albertopaim.libraryApi.Controller.dto.AutorDTO;
-import com.albertopaim.libraryApi.Controller.dto.ErroResponse;
+import com.albertopaim.libraryApi.Controller.dto.ErroResposta;
 import com.albertopaim.libraryApi.exceptions.RegistroDuplicadosExceptions;
 import com.albertopaim.libraryApi.model.Autor;
 import com.albertopaim.libraryApi.services.AutorService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -28,7 +29,7 @@ public class AutorController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> create(@RequestBody AutorDTO autor) {
+    public ResponseEntity<Object> create(@RequestBody @Valid AutorDTO autor) {
         try {
             Autor autorEntity = autor.mapearAutor();
             autorService.save(autorEntity);
@@ -41,7 +42,7 @@ public class AutorController {
 
             return ResponseEntity.created(location).build();
         } catch (RegistroDuplicadosExceptions e) {
-            var erroDTO = ErroResponse.conflito(e.getMessage());
+            var erroDTO = ErroResposta.conflito(e.getMessage());
             return ResponseEntity.status(erroDTO.status()).body(erroDTO);
         }
     }
@@ -87,7 +88,7 @@ public class AutorController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Void> updateAutores(@PathVariable("id") String id, @RequestBody AutorDTO autorDTO) {
+    public ResponseEntity<Void> updateAutores(@PathVariable("id") String id, @RequestBody @Valid AutorDTO autorDTO) {
 
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.getAutorByid(idAutor);
