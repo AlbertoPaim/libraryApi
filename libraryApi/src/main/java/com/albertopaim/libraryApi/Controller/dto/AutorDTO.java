@@ -14,14 +14,4 @@ public record AutorDTO(UUID id,
                        LocalDate dataNascimento,
                        @NotBlank(message = "Campo obrigatório")
                        String nacionalidade) {
-
-    public Autor mapearAutor() {
-        Autor autor = new Autor();
-        autor.setId(this.id);
-        autor.setName(this.name);
-        autor.setDataNascimento(this.dataNascimento);
-        autor.setNacionalidade(this.nacionalidade);
-
-        return autor;
-    }
 }
