@@ -12,7 +12,6 @@ import java.util.UUID;
 @Service
 public class AutorService {
     private final AutorRepository autorRepository;
-
     private final AutorValidator validator;
 
     public AutorService(AutorRepository autorRepository, AutorValidator validator) {
