@@ -27,6 +27,7 @@ public class LivroController {
     public ResponseEntity<Object> criarLivro (@RequestBody @Valid  CadastroLivroDTO livroDTO) {
         try {
             Livro livro = mapper.toEntity(livroDTO);
+            livroService.salvar(livro);
 
         return ResponseEntity.ok(livro);
         } catch (RegistroDuplicadosExceptions e){
