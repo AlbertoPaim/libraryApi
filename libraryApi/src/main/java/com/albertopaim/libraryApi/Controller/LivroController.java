@@ -44,5 +44,12 @@ public class LivroController {
         }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    ;
+    public ResponseEntity<Object> deletarLivro (@PathVariable("id") String id)  {
+        return livroService.obterLivro(UUID.fromString(id)).map(livro -> {
+            livroService.deletar(livro);
+            return ResponseEntity.noContent().build();
+        }).orElseGet(()-> ResponseEntity.notFound().build());
+    };
+
+
 }

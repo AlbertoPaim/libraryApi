@@ -22,5 +22,7 @@ public class LivroService {
         return livroRepository.findById(id);
     }
 
-
+    public void deletar(Livro livro){
+        livroRepository.delete(livro);
+    }
 }
